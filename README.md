@@ -13,8 +13,8 @@ include subdomain or folder just main domain like `http://example.com/` or
 2. Extract, and then open with terminal
 3. Run `sudo bash install`
 4. Check rules with command `sudo iptables -L --line-number`
-example:
 
+example:
 ```
 Chain INPUT (policy ACCEPT)
 target     prot opt source               destination
