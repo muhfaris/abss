@@ -1,0 +1,57 @@
+#!/bin/bash
+## Read file
+file=list/sites.txt
+
+distro() {
+    os=`awk '/^ID=/' /etc/*-release | awk -F'=' '{ print tolower($2) }'`
+    if [ $os == 'arch' ];then
+        yes |sudo pacman -S iptables
+    elif [ $os == 'ubuntu' || $os == 'debian' ];then
+        sudo apt-get install iptables -y
+    elif [ $os == 'centos' ];then
+        sudo yum -y install iptables
+    fi
+}
+
+main() {
+echo '---------------------------------------------------------------'
+echo '|              Script Block Site Adult                        |'
+echo '---------------------------------------------------------------'
+echo ' List Site         : '`wc -l < $file`                                    
+echo '---------------------------------------------------------------'
+echo ' CONTRIBUTORT | FAQ |  | HOW | http://github.com/muhfaris/SBSA'
+echo '---------------------------------------------------------------'
+
+ while IFS= read -r varname; do
+    domain=`echo $varname | sed -e 's/\.*\/$//'  -e 's/\(http:\/\/\|https:\/\/\)//'`
+    check=`echo "$domain" | grep -E ^\-?[0-9]*\.?[0-9]+$`
+    if [ "$check" != '' ]; then
+        ipaddress=$domain
+    else
+        ipaddress=`dig +short "$domain"`
+        if [[ "$ipaddress" =~ "block" ]]; then
+            ipaddress=""
+            domain=""
+        fi
+    fi
+
+    if [ "$ipaddress" != "" ] && [ "$ipaddress" != "" ]; then
+     
+        ###Block site by ipaddress
+        iptables -A INPUT -s $ipaddress -j LOG --log-prefix "$domain"
+        iptables -A INPUT -s $ipaddress -j DROP 
+        
+        printf '%s\n' "Block IPAddress: ${domain}" 
+    fi
+
+done < "$file"
+}
+ 
+if [ `which iptables` ]; then 
+    echo "Processing ..."
+    main
+else
+    echo "Installing iptables ..."
+    distro
+fi
+ 
