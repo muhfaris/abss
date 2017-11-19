@@ -1,10 +1,9 @@
 # ABSS
-
-## About ABSS
+## About
 ABSS or Adult Block Site Script is a script you can use to block adult sites at
 a time. You can save adult sites in file `list/sites.txt`, the site is not
 include subdomain or folder just main domain like `http://example.com/` or
-example.com.
+`example.com`.
 
 ## Dependency
 - Iptables
@@ -13,6 +12,6 @@ example.com.
 1. Clone this repo or Download
 2. Extract, and then open with terminal
 3. Run `sudo bash install`
-
+4. Check rules with command `sudo iptables -L --line-number`
 ## To Do
 in Project
